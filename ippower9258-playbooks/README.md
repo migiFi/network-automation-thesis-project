@@ -1,11 +1,5 @@
-# ansible-ippower9258
-Ansible scripts to get and set the state of the power outlets on the Opengear/Aviosys IP Power 9258 PDU
-# why
-I want to automate powering up and shutting down my servers. I use this in combination with ipmiutils to gracefully shut down my servers, and then disconnect power from them. To power up, the servers are set in the BIOS to start when power is applied, so I only need to remotely turn on the power to boot a server.
+Credits go to @syspimp (https://github.com/syspimp) for this very simple but great example of how to automate and manage the the IP Power 9258 using Ansible.
 
-Generally speaking, I don't need to use my servers when I am away from home. I'm creating an automation script that detects when I'm leaving or sleepting and powers down the house. This project was born from necessity.
-# benefit
-Cutting power to the servers reduces the overall load on the electrical circuit, saving money. Automatically shutting down an unused server will save a lot of money over time. It's always about the money,  isn't it?
 # how to use
 The IP Power 9258 is great except for managing the outlets using the device controls. When you want to change an Outlet to/from Off or On, it will blink all the outlets, cutting them off and on until you swith to the correct outlet to control its state.  All of your servers will cut off and on, off and on. This is a great way to destroy your data.
 
