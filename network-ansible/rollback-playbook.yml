@@ -2,10 +2,44 @@
   hosts: all
   gather_facts: false
   tasks:
+  - name: "Check if running-config exists"
+    cisco.ios.ios_command:
+      commands: show running-config
+    register: running_config_output
+    ignore_errors: yes # To ignore errors device not reachable
+
+  - name: "Check if running-config is present"
+    set_fact:
+      running_config_present: "{{ running_config_output | succeeded }}"
+
+  - name: "Erase and reload devices if running-config is present"
+    block:
+    - name: "Erase running-config"
+      cisco.ios.ios_config:
+        lines: no
+      when: running_config_present
+
+    - name: "Reload device"
+      cisco.ios.ios_command:
+        commands: reload
+      when: running_config_present
+
+    - name: "Wait for device to come back after reload"
+      wait_for_connection:
+        timeout: 300
+      when: running_config_present
+    rescue:
+    - name: "Failed to erase and reload. Exiting."
+      debug:
+        msg: "Failed to erase and reload device."
+      when: running_config_present
+
   - name: "Push config file"
     cisco.ios.ios_config:
-      src: #missing the config file
+      src: "{{ config_file }}"
+    when: ansible_network_os == 'ios' # IOS only
 
   - name: "Saving the configuration"
     cisco.ios.ios_config:
       save_when: modified
+    when: ansible_network_os == 'ios'
