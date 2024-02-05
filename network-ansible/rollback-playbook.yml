@@ -1,37 +1,41 @@
 - name: "Rollback Cisco Routers and Switches"
-  hosts: all
+  hosts: routers:switches
   gather_facts: false
   tasks:
-  - name: "Check if running-config exists"
+  - name: "Check if a running-config exists"
     cisco.ios.ios_command:
       commands: show running-config
     register: running_config_output
     ignore_errors: yes # To ignore errors device not reachable
 
-  - name: "Check if running-config is present"
+  - name: "Check if a running-config is present"
     set_fact:
       running_config_present: "{{ running_config_output | succeeded }}"
 
-  - name: "Erase and reload devices if running-config is present"
+  - name: "Erase devices if running-config is present"
     block:
     - name: "Erase running-config"
-      cisco.ios.ios_config:
-        lines: no
+      cisco.ios.ios_command:
+        commands:
+        - write erase
+        - "confirm"
       when: running_config_present
 
     - name: "Reload device"
       cisco.ios.ios_command:
-        commands: reload
+        commands:
+        - reload
+        - "confirm"
       when: running_config_present
 
     - name: "Wait for device to come back after reload"
       wait_for_connection:
-        timeout: 300
+        timeout: 400
       when: running_config_present
     rescue:
-    - name: "Failed to erase and reload. Exiting."
+    - name: "Failed to erase and reload, Exiting playbook"
       debug:
-        msg: "Failed to erase and reload device."
+        msg: "Failed to erase and reload device"
       when: running_config_present
 
   - name: "Push config file"
