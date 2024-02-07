@@ -1,1 +1,1 @@
-config_file: path/to/cisco-switch-simple.txt
+config_file: /home/miggy/network-automation-thesis-project/config_files/cisco-switch-simple.txt

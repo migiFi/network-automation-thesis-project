@@ -1,6 +1,7 @@
 - name: "Rollback Cisco Routers and Switches"
-  hosts: routers:switches
+  hosts: routers
   gather_facts: false
+  connection: network_cli
   tasks:
   - name: "Check if a running-config exists"
     cisco.ios.ios_command:
