@@ -46,8 +46,7 @@ curl 'http://admin:12345678@192.168.0.5/Set.cmd?CMD=GetPower'
 PLAY [Get the power state of the IP Power 9258 unit] *****************************************************************
 
 TASK [Get the state of all of the ports] *****************************************************************************
-[WARNING]: The value ******** (type int) in a string field was converted to '********' (type string). If this does
-not look like what you expect, quote the entire value to ensure it does not change.
+[WARNING]: The value ******** (type int) in a string field was converted to '********' (type string). If this does not look like what you expect, quote the entire value to ensure it does not change.
 
 ok: [192.168.0.5 -> localhost]
 

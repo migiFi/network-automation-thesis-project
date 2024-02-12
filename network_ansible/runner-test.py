@@ -3,8 +3,7 @@ import serial
 import time
 
 devices = {
-    'master': '/dev/ttyUSB1',
-    'nodeOne': '/dev/ttyUSB0',
+    'master': '/dev/ttyUSB0',
 }
 
 commands = {
@@ -22,26 +21,11 @@ commands = {
         b'ip ssh version 2\n',
         b'write memory\n'
     ],
-    'nodeOne': [
-        b'enable\n',
-        b'confifure terminal\n',
-        b'hostname nodeOne\n',
-        b'ip domain-name cisco.com',
-        b'crypto key generate rsa\n',
-        b'line vty 0 15\n',
-        b'login local\n',
-        b'transport input ssh\n',
-        b'exit\n',
-        b'username cisco privilege 15 secret cisco123\n',
-        b'ip ssh version 2\n',
-        b'write memory\n'
-        
-    ],
     
 }
 
 runner = ansible_runner.run(
-    private_data_dir='/home/miggy/network-automation-thesis-project/network_ansible', 
+    private_data_dir='/home/miggy/pi-dev/network-automation-thesis-project/network_ansible/', 
     playbook='rollback-playbook.yml'
 )
 
