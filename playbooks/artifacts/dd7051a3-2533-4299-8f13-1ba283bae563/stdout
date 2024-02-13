@@ -1,0 +1,14 @@
+[1;35m[WARNING]: Unable to parse /etc/ansible/hosts.ini as an inventory source[0m
+[1;35m[WARNING]: No inventory was parsed, only implicit localhost is available[0m
+[1;35m[WARNING]: provided hosts list is empty, only localhost is available. Note that[0m
+[1;35mthe implicit localhost does not match 'all'[0m
+[0;31mERROR! conflicting action statements: hosts, gather_facts[0m
+[0;31m[0m
+[0;31mThe error appears to be in '/home/miggy/network-automation-thesis-project/network_ansible/rollback-playbook.yml': line 41, column 5, but may[0m
+[0;31mbe elsewhere in the file depending on the exact syntax problem.[0m
+[0;31m[0m
+[0;31mThe offending line appears to be:[0m
+[0;31m[0m
+[0;31m[0m
+[0;31m  - name: Test SSH connectivity[0m
+[0;31m    ^ here[0m

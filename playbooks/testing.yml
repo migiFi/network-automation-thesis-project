@@ -1,0 +1,78 @@
+---
+- name: Example playbook for switches and routers
+  hosts: routers
+  gather_facts: false
+  connection: network_cli
+  tasks:
+    - name: Getting router/switch information
+      cisco.ios.ios_command:  
+        commands:
+          - show version
+          - show ip int brief
+      register: print_info
+
+    # - name: "Check if a running-config exists"
+    #   cisco.ios.ios_command:
+    #     commands: show running-config
+    #   register: print_running_config
+    #   ignore_errors: yes 
+
+    - name: Set fact for running_config_present
+      set_fact:
+        running_config_present: "{{ running_config_output.stdout[0] | trim != '' }}"
+      when: running_config_output is defined and running_config_output.stdout is defined
+
+    - name: Erase, reload, and push config of one is present
+      block:
+        # - name: Erase run-config
+        #   cli_command:
+        #     command: "write erase"
+        #     prompt: "Erasing the nvram filesystem will remove all configuration files!Continue?[confirm]"
+        #     answer: "\r" 
+        
+        - name: Reload router
+          cli_command:
+            command: "reload"
+            prompt: "Proceed with reload?"
+            answer: "y"
+          register: result
+
+        - name: Wait for device to comeback after reload
+          wait_for_connection:
+            timeout: 500
+            delay: 160 
+      rescue:
+        - name: Failed to erase and reload, Exiting playbook
+          debug:
+            msg: "Failed to erase and reload device(s)"
+      when: running_config_present | bool
+
+- name: Test SSH Connectivity and push config files
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Wait for SSH to be available
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        state: started
+        delay: 60
+        timeout: 500
+    
+    - name: Push config file
+      ios_config:
+        src: "/home/miggy/network-automation-thesis-project/config_files/cisco-switch-simple.txt"
+      when: ansible_network_os == 'ios'
+
+    - name: Saving the config
+      ios_config:
+        save_when: modified
+      when: ansible_network_os == 'ios'
+
+    # - name: Show result
+    #   debug:
+    #     var: 
+
+
+
+

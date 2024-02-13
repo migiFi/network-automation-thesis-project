@@ -1,5 +1,14 @@
 hostname master
 !
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+memory-size iomem 15
+dot11 syslog
+ip source-route
+!         
 ip dhcp excluded-address 192.168.1.1 192.168.1.4
 !
 ip dhcp pool LAN
@@ -7,6 +16,22 @@ ip dhcp pool LAN
  default-router 192.168.1.1 
  dns-server 1.1.1.1 
 !
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!         
+voice-card 0
+!
+crypto pki token default removal timeout 0
+!
+license udi pid CISCO2801 sn FCZ121411KM
+username miggy privilege 15 secret 5 $1$BBz/$0aJPsmVRch2RfEWPcba9p.
+!
+redundancy
+!
+ip ssh version 2
+! 
 interface FastEthernet0/0
  description Connection to ISP
  ip address dhcp
@@ -47,3 +72,18 @@ ip route 0.0.0.0 0.0.0.0 10.95.1.254
 access-list 101 permit ip 192.168.0.0 0.0.0.255 any
 access-list 101 permit ip 192.168.0.0 0.0.255.255 any
 !
+control-plane
+!
+mgcp profile default
+!
+line con 0
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+scheduler allocate 20000 1000
+end

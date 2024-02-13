@@ -1,0 +1,9 @@
+[1;35m[WARNING]: Unable to parse /etc/ansible/hosts.ini as an inventory source[0m
+[1;35m[WARNING]: No inventory was parsed, only implicit localhost is available[0m
+[1;35m[WARNING]: provided hosts list is empty, only localhost is available. Note that[0m
+[1;35mthe implicit localhost does not match 'all'[0m
+[1;35m[WARNING]: Could not match supplied host pattern, ignoring: routers[0m
+
+PLAY [Rollback Cisco Routers and Switches] *************************************
+[0;36mskipping: no hosts matched[0m
+[0;31mERROR! the field 'hosts' is required but was not set[0m

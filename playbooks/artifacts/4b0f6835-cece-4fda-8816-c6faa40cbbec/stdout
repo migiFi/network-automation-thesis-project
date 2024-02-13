@@ -1,0 +1,91 @@
+
+PLAY [Example playbook for switches and routers] *******************************
+
+TASK [Getting router/switch information] ***************************************
+[0;32mok: [192.168.1.2][0m
+
+TASK [Set fact for running_config_present] *************************************
+[0;36mskipping: [192.168.1.2][0m
+
+TASK [Reload router] ***********************************************************
+[0;32mok: [192.168.1.2][0m
+
+TASK [Wait for device to comeback after reload] ********************************
+[0;35m[DEPRECATION WARNING]: PlayContext.verbosity is deprecated, use [0m
+[0;35mansible.utils.display.Display.verbosity instead. This feature will be removed [0m
+[0;35min version 2.18. Deprecation warnings can be disabled by setting [0m
+[0;35mdeprecation_warnings=False in ansible.cfg.[0m
+[0;35m[DEPRECATION WARNING]: The connection's stdin object is deprecated. Call [0m
+[0;35mdisplay.prompt_until(msg) instead. This feature will be removed in version [0m
+[0;35m2.19. Deprecation warnings can be disabled by setting [0m
+[0;35mdeprecation_warnings=False in ansible.cfg.[0m
+[0;31mfatal: [192.168.1.2]: FAILED! => {"changed": false, "elapsed": 660, "msg": "timed out waiting for connection port up: ssh connection failed: ssh connect failed: No route to host"}[0m
+
+TASK [Failed to erase and reload, Exiting playbook] ****************************
+[0;32mok: [192.168.1.2] => {[0m
+[0;32m    "msg": "Failed to erase and reload device(s)"[0m
+[0;32m}[0m
+
+PLAY [Test SSH Connectivity and push config files] *****************************
+
+TASK [Wait for SSH to be available] ********************************************
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/ansible/executor/task_queue_manager.py", line 468, in send_callback
+    method(*new_args, **kwargs)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 630, in v2_playbook_on_stats
+    with self.capture_event_data('playbook_on_stats', **event_data):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 374, in capture_event_data
+    event_context.dump_begin(sys.stdout)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 239, in dump_begin
+    self.cache.set(":1:ev-{}".format(begin_dict['uuid']), begin_dict)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 111, in set
+    os.mkdir(os.path.join(self.private_data_dir, 'job_events'), 0o700)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/miggy/network-automation-thesis-project/network_ansible/artifacts/4b0f6835-cece-4fda-8816-c6faa40cbbec/job_events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/ansible/cli/__init__.py", line 659, in cli_executor
+    exit_code = cli.run()
+  File "/usr/lib/python3/dist-packages/ansible/cli/playbook.py", line 156, in run
+    results = pbex.run()
+  File "/usr/lib/python3/dist-packages/ansible/executor/playbook_executor.py", line 246, in run
+    self._tqm.send_callback('v2_playbook_on_stats', self._tqm._stats)
+  File "/usr/lib/python3/dist-packages/ansible/utils/lock.py", line 41, in inner
+    return func(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/ansible/executor/task_queue_manager.py", line 471, in send_callback
+    display.warning(u"Failure using method (%s) in callback plugin (%s): %s" % (to_text(method_name), to_text(callback_plugin), to_text(e)))
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 256, in wrapper
+    return f(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/ansible/utils/display.py", line 504, in warning
+    self.display(new_msg, color=C.COLOR_WARN, stderr=True)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 304, in wrapper
+    event_context.dump_begin(fileobj)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 239, in dump_begin
+    self.cache.set(":1:ev-{}".format(begin_dict['uuid']), begin_dict)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 111, in set
+    os.mkdir(os.path.join(self.private_data_dir, 'job_events'), 0o700)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/miggy/network-automation-thesis-project/network_ansible/artifacts/4b0f6835-cece-4fda-8816-c6faa40cbbec/job_events'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/bin/ansible-playbook", line 33, in <module>
+    sys.exit(load_entry_point('ansible-core==2.15.9', 'console_scripts', 'ansible-playbook')())
+  File "/usr/lib/python3/dist-packages/ansible/cli/playbook.py", line 240, in main
+    PlaybookCLI.cli_executor(args)
+  File "/usr/lib/python3/dist-packages/ansible/cli/__init__.py", line 687, in cli_executor
+    display.error("Unexpected Exception, this is probably a bug: %s" % to_text(e), wrap_text=False)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 256, in wrapper
+    return f(*args, **kwargs)
+  File "/usr/lib/python3/dist-packages/ansible/utils/display.py", line 559, in error
+    self.display(new_msg, color=C.COLOR_ERROR, stderr=True)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 304, in wrapper
+    event_context.dump_begin(fileobj)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 239, in dump_begin
+    self.cache.set(":1:ev-{}".format(begin_dict['uuid']), begin_dict)
+  File "/home/miggy/.local/lib/python3.10/site-packages/ansible_runner/display_callback/callback/awx_display.py", line 111, in set
+    os.mkdir(os.path.join(self.private_data_dir, 'job_events'), 0o700)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/miggy/network-automation-thesis-project/network_ansible/artifacts/4b0f6835-cece-4fda-8816-c6faa40cbbec/job_events'

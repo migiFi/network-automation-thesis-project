@@ -1,13 +1,48 @@
 hostname nodeOne
 !
-username cisco secret cisco123
+boot-start-marker
+boot-end-marker
+!
+username miggy privilege 15 secret 5 $1$yJua$SjcbXu/D0/7Mj98SENQLh.
+no aaa new-model
+system mtu routing 1500
 ip domain-name cisco.com
-!        
+!         
+crypto pki trustpoint TP-self-signed-1671269504
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1671269504
+ revocation-check none
+ rsakeypair TP-self-signed-1671269504
+!
+crypto pki certificate chain TP-self-signed-1671269504
+ certificate self-signed 01
+  30820249 308201B2 A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 31363731 32363935 3034301E 170D3933 30333031 30303031 
+  30375A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 36373132 
+  36393530 3430819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100929D 20A67DC6 4D4F858D 7742C4AB A15EF208 F840EE67 4FEC2782 B9BD962E 
+  16F5F098 2B8ADCC9 36A60AFC 81F7FD1E 055C2C16 8B900CAF B73C45FB B38A30D1 
+  55D3235D 34FF9D34 919990FF 078B640D 75C97A75 9AF05081 F6C45CB8 A8CB10F2 
+  DF96982C C04A044A EECF7C43 8792A446 200EDAF6 9BF6BD56 1349CB38 B8C9564B 
+  62F90203 010001A3 71306F30 0F060355 1D130101 FF040530 030101FF 301C0603 
+  551D1104 15301382 116E6F64 654F6E65 2E636973 636F2E63 6F6D301F 0603551D 
+  23041830 168014D6 39AD6F78 C6170F41 39DF0684 0AF9C221 83F5F630 1D060355 
+  1D0E0416 0414D639 AD6F78C6 170F4139 DF06840A F9C22183 F5F6300D 06092A86 
+  4886F70D 01010405 00038181 00185AB9 95959516 2F4BC88F 673FA518 FE821E4B 
+  DBF9559F FD67F5E8 51FF4BEA F3D74726 98FE34E4 0406D94C 428615A0 47840335 
+  89888060 F96772DC B6D29797 E3C89B52 481CF5BF EA7BF0F4 3AA6736B 2EEB00B2 
+  749D89C2 DAEE06EA A487FC95 DF7DA024 32D28D7C D6F2CEC0 C221FA8A 27A3A65B 
+  C0EB8E5E 22346284 6A53C18F B3
+        quit
+!
 spanning-tree mode pvst
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
 !
+ip ssh time-out 60
 ip ssh version 2
 !
 interface FastEthernet0/1
@@ -44,7 +79,7 @@ interface FastEthernet0/6
  switchport access vlan 10
  switchport mode access
  spanning-tree portfast
-!
+!         
 interface FastEthernet0/7
  description End devices 
  switchport access vlan 10
@@ -64,10 +99,38 @@ interface FastEthernet0/9
  spanning-tree portfast
 !
 interface FastEthernet0/10
- description End devices 
- switchport access vlan 10
- switchport mode access
- spanning-tree portfast
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!         
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
 !
 interface Vlan1
  no ip address
@@ -80,7 +143,7 @@ ip default-gateway 192.168.1.1
 ip http server
 ip http secure-server
 !
-vstack
+logging esm config
 !
 line con 0
 line vty 0 4

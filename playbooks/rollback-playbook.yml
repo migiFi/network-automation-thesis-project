@@ -1,3 +1,4 @@
+---
 - name: "Rollback Cisco Routers and Switches"
   hosts: routers
   gather_facts: false
@@ -6,7 +7,7 @@
     cisco.ios.ios_command:
       commands: show running-config
     register: running_config_output
-    ignore_errors: yes # To ignore errors device not reachable
+    ignore_errors: true # To ignore errors device not reachable
 
   - name: "Check if a running-config is present"
     set_fact:
@@ -38,25 +39,24 @@
           msg: "Failed to erase and reload device"
         when: running_config_present
 
-  - name: Test SSH connectivity
-    hosts: routers 
-    gather_facts: no
-    tasks:
-      - name: Wait for SSH to be available
-        wait_for:
-          host: "{{ item }}"
-          port: 22
-          state: started
-          delay: 30
-          timeout: 500
-        loop: "{{groups[routers]}}"
+- name: Test SSH connectivity
+  hosts: routers
+  tasks:
+    - name: Wait for SSH to be available
+      wait_for:
+        host: "{{ item }}"
+        port: 22
+        state: started
+        delay: 30
+        timeout: 500
+      loop: "{{groups[routers]}}"
 
-      - name: "Push config file"
-        cisco.ios.ios_config:
-          src: "{{ config_file }}"
-        when: ansible_network_os == 'ios' # IOS only
+    - name: "Push config file"
+      cisco.ios.ios_config:
+         src: "{{ config_file }}"
+      when: ansible_network_os == 'ios' # IOS only
 
-      - name: "Saving the configuration"
-        cisco.ios.ios_config:
-          save_when: modified
-        when: ansible_network_os == 'ios'
+    - name: "Saving the configuration"
+      cisco.ios.ios_config:
+         save_when: modified
+      when: ansible_network_os == 'ios'
