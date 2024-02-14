@@ -1,1 +1,2 @@
-config_file: /home/miggy/network-automation-thesis-project/config_files/cisco-router-simple.txt
+---
+config_file: "/home/miggy/network-automation-thesis-project/config_files/cisco-router-simple.txt"
