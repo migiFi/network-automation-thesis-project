@@ -1,17 +1,22 @@
----
 - name: Set the power state of the IP Power 9258 outlets
   hosts: ippower
   gather_facts: false
-  # these can be set in an Ansible Tower survey
-  # or passed in as extra vars on the cmdline
+  # these can be passed in as extra vars on the cmdline
+  # for example:
+  #ansible-playbook -e '{
+  #    "outlets":[{"outlet":"1","state":"0"},
+  #               {"outlet":"2","state":"0"}]}' -i inventory ippower-setstate.yml 
   vars:
     outlets:
     - outlet: 1
       state: 1
+
     - outlet: 2
       state: 1
+
     - outlet: 3
       state: 0
+
     - outlet: 4
       state: 0
   tasks:
@@ -37,24 +42,14 @@
     delegate_to: localhost
 
   - name: Creating dictionary from the output
-    # output.content looks like this: <html>p61=1,p62=1,p63=1,p64=1</html>, 
-    # where P61 thru P64 are the 4 outlets and
-    # 1 is outlet on, 0 is outlet off
-    # we create a dictionary by splitting on the comma in output.content,
-    # create an index variable outlet_index to track the outlet number in a dictionary named 'result'
-    # if 'result' is not set, default to empty {} and combine with local vars: 'key' and 'value'
-    # local vars: 'value' is set by removing all content except the outlet state using regex_replace
-    # replace '0' to be 'Off'
-    # create an if/then by searching for Off and if not found output On
-    # result = {"Port1": "On", "Port2": "Off" ...}
     set_fact:
       result: "{{ result | default({},true) | combine( { key: value } ) }}"
     loop: "{{ output.content.split(',') }}"
     loop_control:
       index_var: outlet_index
     vars:
-     key: "port{{ outlet_index+1 }}"
-     value: "{{item | regex_replace('(.*)=','') | replace('0','Off') | regex_search('Off') | default('On', true) }}"
+      key: "port{{ outlet_index+1 }}"
+      value: "{{item | regex_replace('(.*)=','') | replace('0','Off') | regex_search('Off') | default('On', true) }}"
 
   - name: Show the Final State of Outlets
     debug: var=result
