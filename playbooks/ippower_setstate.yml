@@ -9,7 +9,7 @@
   vars:
     outlets:
     - outlet: 1
-      state: 1
+      state: 0
 
     - outlet: 2
       state: 1
