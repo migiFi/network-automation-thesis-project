@@ -3,6 +3,22 @@
   gather_facts: false
   connection: network_cli
   tasks:
+  - name: Save running config locally
+    cisco.ios.ios_command:
+      commands:
+      - "Copy running-config flash:/last-backup.txt"
+      prompts:
+      - "[confirm]"
+      response:
+      - "\n"
+    when: "'routers' in group_names or 'switches' in group_names"
+
+  - name: Reload the device
+    cisco.ios.ios_reboot:
+      confirm: yes
+      save_when: never
+    when: "'routers' in group_names or 'switches' in group_names"
+
   - name: Wait for SSH to be available on the router
     wait_for:
       host: "192.168.1.1"

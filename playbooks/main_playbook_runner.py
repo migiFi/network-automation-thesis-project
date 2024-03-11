@@ -42,6 +42,8 @@ def push_config(device_port, config_file):
     except Exception as e:
         print(f"Failed to push configuration to device on {device_port}: {e}")
 
+start_time = time.time()
+
 playbook_path =  '/home/miggy/network-automation-thesis-project/playbooks/ippower_setstate.yml'
 run_ansible_playbook(playbook_path)
 
@@ -54,3 +56,8 @@ push_config('/dev/ttyUSB1',
 #time.sleep(8)
 
 #push_config('/dev/ttyUSB0', '/home/miggy/network-automation-thesis-project/config_files/cisco-switch.txt')
+
+end_time = time.time()
+
+total_time = round(end_time - start_time, 2)
+print(f"Execution time: {total_time} seconds")
