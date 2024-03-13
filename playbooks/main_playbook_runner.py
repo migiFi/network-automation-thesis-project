@@ -12,26 +12,26 @@ def run_ansible_playbook(playbook_path):
 def push_config(device_port, config_file):
     try:
         with serial.Serial(device_port, baudrate=9600, timeout=1) as ser:
-            # skipping the initial configuration dialog
+            # if prompted, it skips the initial config dialog
             ser.write(b"\r\n")
-            time.sleep(0.75)
+            time.sleep(0.40)
             ser.write(b"no\n")
-            time.sleep(0.75)
+            time.sleep(0.40)
             
-            print("Waiting for device to be ready.")
-            time.sleep(5)
+            print("Pushing config files...")
+            time.sleep(4)
             
             ser.write(b"\r\n")
-            time.sleep(0.75)
+            time.sleep(0.40)
             ser.write(b"enable\n")
-            time.sleep(0.75)
+            time.sleep(0.40)
             ser.write(b"configure terminal\n")
-            time.sleep(0.75)
+            time.sleep(0.40)
             
             with open(config_file, 'r') as file:
                 for line in file:
                     ser.write((line + '\n').encode())
-                    time.sleep(0.60) 
+                    time.sleep(0.45) 
                     output = ser.read(ser.inWaiting())
                     print(output.decode(), end='')  #
                     
@@ -48,14 +48,13 @@ playbook_path =  '/home/miggy/network-automation-thesis-project/playbooks/ippowe
 run_ansible_playbook(playbook_path)
 
 print("Waiting for devices to boot up...")
-time.sleep(160) # boot up time approx. 3 minutes  
+time.sleep(180) 
 
-push_config('/dev/ttyUSB1',
-            '/home/miggy/network-automation-thesis-project/config_files/cisco_switchTwo.txt')
+push_config('/dev/ttyUSB1', '/home/miggy/network-automation-thesis-project/config_files/cisco_switchTwo.txt')
 
-#time.sleep(8)
+time.sleep(25)
 
-#push_config('/dev/ttyUSB0', '/home/miggy/network-automation-thesis-project/config_files/cisco-switch.txt')
+push_config('/dev/ttyUSB3', '/home/miggy/network-automation-thesis-project/config_files/cisco_switchThree.txt')
 
 end_time = time.time()
 

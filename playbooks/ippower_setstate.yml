@@ -9,16 +9,16 @@
   vars:
     outlets:
     - outlet: 1
-      state: 0
+      state: 1
 
     - outlet: 2
-      state: 0
+      state: 1
 
-    - outlet: 3
-      state: 0
+    # - outlet: 3
+    #   state: 0
 
-    - outlet: 4
-      state: 0
+    # - outlet: 4
+    #   state: 0
   tasks:
   - name: Set the state of the Outlets being changed
     uri:
