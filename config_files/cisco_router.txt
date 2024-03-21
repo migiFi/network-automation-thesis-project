@@ -13,7 +13,7 @@ crypto pki token default removal timeout 0
 !
 !
 license udi pid CISCO2801 sn FCZ121411KM
-username cisco privilege 15 secret 5 $1$BBz/$0aJPsmVRch2RfEWPcba9p.
+username cisco privilege 15 secret 0 cisco123
 ip domain-name cisco.com
 !
 ip ssh version 2

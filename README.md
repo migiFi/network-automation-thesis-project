@@ -37,77 +37,82 @@ Credits go to @syspimp (https://github.com/syspimp) for this straightforward but
 
 
 ```shell
-curl 'http://admin:12345678@192.168.0.5/Set.cmd?CMD=GetPower'
+curl 'http://admin:12345678@192.168.1.10/Set.cmd?CMD=GetPower'
 ```
 
 ```shell
-[syspimp@localhost ansible-ippower9258]$ ansible-playbook -i inventory ippower-getstate.yml 
+$ ansible-playbook -i inventory getPowerState.yml 
 
-PLAY [Get the power state of the IP Power 9258 unit] *****************************************************************
+PLAY [Get the power state of the IP Power 9258 unit] *****************************
 
-TASK [Get the state of all of the ports] *****************************************************************************
-[WARNING]: The value ******** (type int) in a string field was converted to '********' (type string). If this does not look like what you expect, quote the entire value to ensure it does not change.
+TASK [Get the state of all of the ports] *****************************************
+ok: [192.168.1.10 -> localhost]
 
-ok: [192.168.0.5 -> localhost]
-
-TASK [Creating dictionary from the output] ***************************************************************************
-ok: [192.168.0.5] => (item=<html>p61=1)
-ok: [192.168.0.5] => (item=p62=1)
-ok: [192.168.0.5] => (item=p63=1)
-ok: [192.168.0.5] => (item=p64=1</html>
+TASK [Creating dictionary from the output] ***************************************
+ok: [192.168.1.10] => (item=<html>p61=0)
+ok: [192.168.1.10] => (item=p62=0)
+ok: [192.168.1.10] => (item=p63=0)
+ok: [192.168.1.10] => (item=p64=0</html>
 )
 
-TASK [Show the Parsed Output] ****************************************************************************************
-ok: [192.168.0.5] => {
+TASK [Show the Parsed Output] ****************************************************
+ok: [192.168.1.10] => {
     "result": {
-        "port1": "On",
-        "port2": "On",
-        "port3": "On",
-        "port4": "On"
+        "port1": "Off",
+        "port2": "Off",
+        "port3": "Off",
+        "port4": "Off"
     }
 }
 
-PLAY RECAP ***********************************************************************************************************
-192.168.0.5   : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+PLAY RECAP ***********************************************************************
+192.168.1.10               : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
 
 ```
-
+output.content looks like this: <html>p61=1,p62=1,p63=1,p64=1</html>, 
+where P61 thru P64 are the 4 outlets and
+1 is outlet on, 0 is outlet off
+we create a dictionary by splitting on the comma in output.content,
+reate an index variable outlet_index to track the outlet number in a dictionary named 'result'if 'result' is not set, default to empty {} and combine with local vars: 'key' and 'value'
+local vars: 'value' is set by removing all content except the outlet state using regex_replace
+replace '0' to be 'Off'
+create an if/then by searching for Off and if not found output On
+result = {"Port1": "On", "Port2": "Off" ...}
 
 
 ```shell
-[syspimp@localhost ansible-ippower9258]$ ansible-playbook -e '{"outlets":[{"outlet":"1","state":"0"},{"outlet":"2","state":"0"}]}' -i inventory ippower-setstate.yml 
+$ ansible-playbook -e '{"outlets":[{"outlet":"1","state":"1"},{"outlet":"2","state":"1"}]}' -i inventory setPowerState.yml 
 
 PLAY [Set the power state of the IP Power 9258 outlets] **************************************************************
 
 TASK [Set the state of the Outlets being changed] ********************************************************************
-ok: [192.168.0.5 -> localhost] => (item={'outlet': '1', 'state': '0'})
-ok: [192.168.0.5 -> localhost] => (item={'outlet': '2', 'state': '0'})
-[WARNING]: The value ******** (type int) in a string field was converted to '********' (type string). If this does
-not look like what you expect, quote the entire value to ensure it does not change.
+ok: [192.168.1.10 -> localhost] => (item={'outlet': '1', 'state': '1'})
+ok: [192.168.1.10 -> localhost] => (item={'outlet': '2', 'state': '1'})
+[WARNING]: The value ******** (type int) in a string field was converted to '********' (type string). If this does not look like what you expect, quote the entire value to ensure it does not change.
 
 
 TASK [Get the state of the Outlets] **********************************************************************************
-ok: [192.168.0.5 -> localhost]
+ok: [192.168.1.10 -> localhost]
 
 TASK [Creating dictionary from the output] ***************************************************************************
-ok: [192.168.0.5] => (item=<html>p61=0)
-ok: [192.168.0.5] => (item=p62=0)
-ok: [192.168.0.5] => (item=p63=1)
-ok: [192.168.0.5] => (item=p64=1</html>
+ok: [192.168.1.10] => (item=<html>p61=1)
+ok: [192.168.1.10] => (item=p62=1)
+ok: [192.168.1.10] => (item=p63=0)
+ok: [192.168.1.10] => (item=p64=0</html>
 )
 
 TASK [Show the Final State of Outlets] *******************************************************************************
-ok: [192.168.0.5] => {
+ok: [192.168.1.10] => {
     "result": {
-        "port1": "Off",
-        "port2": "Off",
-        "port3": "On",
-        "port4": "On"
+        "port1": "On",
+        "port2": "On",
+        "port3": "Off",
+        "port4": "Off"
     }
 }
 
 PLAY RECAP ***********************************************************************************************************
-192.168.0.5   : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+192.168.1.10   : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
-[syspimp@localhost ansible-ippower9258]$
 ```

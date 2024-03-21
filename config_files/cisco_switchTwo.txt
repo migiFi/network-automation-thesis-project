@@ -1,7 +1,7 @@
 hostname switch_node_TWO
 !
 !
-username cisco privilege 15 secret 5 $1$s1OD$Zh0iLa.PMpVACvEyfbVYp0
+username cisco privilege 15 password cisco123
 no aaa new-model
 system mtu routing 1500
 ip domain-name cisco.com

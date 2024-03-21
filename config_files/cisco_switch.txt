@@ -1,6 +1,6 @@
 hostname master_Switch
 !
-username cisco privilege 15 secret 5 $1$yJua$SjcbXu/D0/7Mj98SENQLh.
+username cisco privilege 15 secret 0 cisco123
 ip domain-name cisco.com
 crypto pki trustpoint TP-self-signed-1671269504
  enrollment selfsigned

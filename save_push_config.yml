@@ -1,46 +1,43 @@
 - name: Configure router and switch sequentially
-  hosts: all
+  hosts: switches
   gather_facts: false
   connection: network_cli
   tasks:
   - name: Save running config locally
     cisco.ios.ios_command:
       commands:
-      - "Copy running-config flash:/last-backup.txt"
-      prompts:
-      - "[confirm]"
-      response:
+      - "copy running-config flash:/last-backup.txt"
       - "\n"
-    when: "'routers' in group_names or 'switches' in group_names"
+    when: "'switches' in group_names"
 
-  - name: Reload the device
-    cisco.ios.ios_reboot:
-      confirm: yes
-      save_when: never
-    when: "'routers' in group_names or 'switches' in group_names"
+  # - name: Reload the device
+  #   cisco.ios.ios_reboot:
+  #     confirm: yes
+  #     save_when: never
+  #   when: "'routers' in group_names or 'switches' in group_names"
 
-  - name: Wait for SSH to be available on the router
+  - name: Wait for SSH to be available on the switchTwo
     wait_for:
-      host: "192.168.1.1"
+      host: "192.168.1.3"
       port: 22
       state: started
       delay: 15
       timeout: 120
-    when: "'routers' in group_names"
+    when: "'switches' in group_names"
 
   - name: Push config file to the router
     ios_config:
-      src: "{{ config_file }}"
-    when: "'routers' in group_names and inventory_hostname == '192.168.1.1'"
+      src: "{{ config_file_switchTwo }}"
+    when: "'switches' in group_names and inventory_hostname == '192.168.1.3'"
 
   # - name: Wait for ports to come up on the router
   #   pause:
   #     minutes: 0.5
   #   when: "'routers' in group_names and inventory_hostname == '10.95.1.169'"
 
-  - name: Wait for SSH to be available on the switch
+  - name: Wait for SSH to be available on the switchThree
     wait_for:
-      host: "192.168.1.2"
+      host: "192.168.1.4"
       port: 22
       state: started
       delay: 15
@@ -49,8 +46,8 @@
 
   - name: Push config file to the switch
     ios_config:
-      src: "{{ config_file }}"
-    when: "'switches' in group_names and inventory_hostname == '192.168.1.2'"
+      src: "{{ config_file_switchThree }}"
+    when: "'switches' in group_names and inventory_hostname == '192.168.1.4'"
 
   - name: Getting router/switch information
     cisco.ios.ios_command:
