@@ -16,18 +16,18 @@ running_config_present = true
 192.168.1.2 
 
 [masterRouter:vars]
-config_file="/home/miggy/ansible-network/config_files/cisco_router.txt"
+config_file="/home/miggy/ansible-network/config_files/master_router.txt"
 
 [masterSwitch:vars]
-config_file="/home/miggy/ansible-network/config_files/cisco_switch.txt"
+config_file="/home/miggy/ansible-network/config_files/master_switch.txt"
 
 [switches]
 192.168.1.3 
 192.168.1.4 
 
 [switches:vars]
-config_file_switchTwo="/home/miggy/ansible-network/config_files/cisco_switchTwo.txt"
-config_file_switchThree="/home/miggy/ansible-network/config_files/cisco_switchThree.txt"
+config_file_switchTwo="/home/miggy/ansible-network/config_files/switchTwo.txt"
+config_file_switchThree="/home/miggy/ansible-network/config_files/switchThree.txt"
 
 [ippower]
 192.168.1.10

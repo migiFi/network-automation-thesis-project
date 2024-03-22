@@ -50,11 +50,11 @@ run_ansible_playbook(playbook_path)
 print("Waiting for devices to boot up...")
 time.sleep(150) 
 
-push_config('/dev/ttyUSB2', '/home/miggy/ansible-network/config_files/cisco_switchTwo.txt')
+push_config('/dev/ttyUSB2', '/home/miggy/ansible-network/config_files/switchTwo.txt')
 
 time.sleep(30)
 
-push_config('/dev/ttyUSB3', '/home/miggy/ansible-network/config_files/cisco_switchThree.txt')
+push_config('/dev/ttyUSB3', '/home/miggy/ansible-network/config_files/switchThree.txt')
 
 end_time = time.time()
 
