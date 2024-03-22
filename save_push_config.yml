@@ -2,6 +2,11 @@
   hosts: switches
   gather_facts: false
   connection: network_cli
+  vars_prompt:
+    - name: backup_file
+      prompt: "Enter a unique filename for the backup"
+      private: no
+  
   tasks:
     - name: Wait for SSH to be available on the device
       wait_for:
@@ -13,12 +18,11 @@
       when: "'switches' in group_names"
 
     - name: Save running config locally
-      cisco.ios.ios_command:
+      ios_command:
         commands:
-          - "copy running-config flash:last-backup.txt\n"
+          - "copy running-config flash:{{ backup_file }}\n"
           - "\n"
-          - "\n"
-      when: "'switches' in group_names"
+      when: backup_file is defined
 
     - name: Push config file to switchTwo
       ios_config:
@@ -36,3 +40,7 @@
           - show version
           - show ip int brief
       register: print_info
+
+    # - name: Print the devices info
+    #   debug:
+    #     var: print_info
