@@ -11,6 +11,9 @@
 # Ansible network config files
 ansible-network/config_files
 
+# logs
+scripts/sched_output.log
+
 
 # Common credential files
 **/credentials.json

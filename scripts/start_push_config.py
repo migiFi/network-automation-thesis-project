@@ -44,7 +44,7 @@ def push_config(device_port, config_file):
 
 start_time = time.time()
 
-playbook_path =  '/home/miggy/ansible-network/setPowerState.yml'
+playbook_path =  '/home/miggy/ansible-network/playbooks/setPowerState.yml'
 run_ansible_playbook(playbook_path)
 
 print("Waiting for devices to boot up...")
