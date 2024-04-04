@@ -1,35 +1,26 @@
-- name: Configure router and switch sequentially
-  hosts: all
+- name: Push new configuration
+  hosts: switches
   gather_facts: false
   connection: network_cli
   tasks:
-  - name: Wait for SSH to be available on the router
+  - name: Wait for SSH to be available on the device
     wait_for:
-      host: "192.168.1.3"
-      port: 22
-      state: started
-      delay: 15
-      timeout: 120
-    when: "'routers' in group_names"
-
-  - name: Push config file to the router
-    ios_config:
-      src: "{{ config_file_switchTwo }}"
-    when: "'routers' in group_names and inventory_hostname == '192.168.1.3'"
-
-  - name: Wait for SSH to be available on the switch
-    wait_for:
-      host: "192.168.1.4"
+      host: "{{ inventory_hostname }}"
       port: 22
       state: started
       delay: 15
       timeout: 120
     when: "'switches' in group_names"
 
-  - name: Push config file to the switch
+  - name: Push config file to switchTwo
+    ios_config:
+      src: "{{ config_file_switchTwo }}"
+    when: "inventory_hostname == '192.168.1.3'"
+
+  - name: Push config file to the switchThree
     ios_config:
       src: "{{ config_file_switchThree }}"
-    when: "'switches' in group_names and inventory_hostname == '192.168.1.4'"
+    when: "inventory_hostname == '192.168.1.4'"
 
   - name: Getting router/switch information
     cisco.ios.ios_command:
