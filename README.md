@@ -66,7 +66,7 @@ ok: [192.168.1.10] => {
 }
 
 PLAY RECAP ***********************************************************************
-192.168.1.10               : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+192.168.1.10               : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0     
 
 
 ```
@@ -84,25 +84,25 @@ result = {"Port1": "On", "Port2": "Off" ...}
 ```shell
 $ ansible-playbook -e '{"outlets":[{"outlet":"1","state":"1"},{"outlet":"2","state":"1"}]}' -i inventory setPowerState.yml 
 
-PLAY [Set the power state of the IP Power 9258 outlets] **************************************************************
+$ ansible-playbook -i inventory setPowerState.yml 
 
-TASK [Set the state of the Outlets being changed] ********************************************************************
-ok: [192.168.1.10 -> localhost] => (item={'outlet': '1', 'state': '1'})
-ok: [192.168.1.10 -> localhost] => (item={'outlet': '2', 'state': '1'})
-[WARNING]: The value ******** (type int) in a string field was converted to '********' (type string). If this does not look like what you expect, quote the entire value to ensure it does not change.
+PLAY [Set the power state of the IP Power 9258 outlets] **************************
 
+TASK [Set the state of the Outlets being changed] ********************************
+ok: [192.168.1.10 -> localhost] => (item={'outlet': 1, 'state': 1})
+ok: [192.168.1.10 -> localhost] => (item={'outlet': 2, 'state': 1})
 
-TASK [Get the state of the Outlets] **********************************************************************************
+TASK [Get the state of the Outlets] **********************************************
 ok: [192.168.1.10 -> localhost]
 
-TASK [Creating dictionary from the output] ***************************************************************************
+TASK [Creating dictionary from the output] ***************************************
 ok: [192.168.1.10] => (item=<html>p61=1)
 ok: [192.168.1.10] => (item=p62=1)
 ok: [192.168.1.10] => (item=p63=0)
 ok: [192.168.1.10] => (item=p64=0</html>
 )
 
-TASK [Show the Final State of Outlets] *******************************************************************************
+TASK [Show the Final State of Outlets] *******************************************
 ok: [192.168.1.10] => {
     "result": {
         "port1": "On",
@@ -112,7 +112,9 @@ ok: [192.168.1.10] => {
     }
 }
 
-PLAY RECAP ***********************************************************************************************************
-192.168.1.10   : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+PLAY RECAP ***********************************************************************
+192.168.1.10               : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+
 
 ```

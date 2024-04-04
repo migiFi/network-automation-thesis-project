@@ -3,11 +3,15 @@
   gather_facts: false
   connection: network_cli
   vars_prompt:
-    - name: backup_file
+    - name: filename
       prompt: "Enter a unique filename for the backup"
       private: no
   
   tasks:
+    - name: Generate backup file name
+      set_fact:
+        backup_file: "{{ filename }}_{{lookup('pipe', 'date +%d-%m-%Y_%H-%M')}}"
+    
     - name: Wait for SSH to be available on the device
       wait_for:
         host: "{{ inventory_hostname }}"
@@ -41,6 +45,4 @@
           - show ip int brief
       register: print_info
 
-    # - name: Print the devices info
-    #   debug:
-    #     var: print_info
+
