@@ -5,7 +5,7 @@
   vars_prompt:
     - name: filename
       prompt: "Enter a unique filename for the backup"
-      private: no
+      private: false
   
   tasks:
     - name: Generate backup file name

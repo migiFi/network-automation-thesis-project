@@ -6,29 +6,26 @@ import os
 def start_devices():
     os.chdir('/home/miggy/ansible-network/playbooks')
     command = [
-        "nohup",
         "ansible-playbook",
         "-e", '{"outlets":[{"outlet":"1","state":"1"},{"outlet":"2","state":"1"}]}',
         "-i", "inventory",
-        "setPowerState.yml",
-        "> start_devices.log 2>&1"
+        "setPowerState.yml"
     ]
-    subprocess.Popen(command)
+    with open("start_devices.log", "w") as logfile:
+        subprocess.Popen(command, stdout=logfile, stderr=subprocess.STDOUT)
 
 def shutdown_devices():
     os.chdir('/home/miggy/ansible-network/playbooks')
     command = [
-        "nohup",
         "ansible-playbook",
         "-e", '{"outlets":[{"outlet":"1","state":"0"},{"outlet":"2","state":"0"}]}',
         "-i", "inventory",
-        "setPowerState.yml",
-        "> shutdown_devices.log 2>&1"
+        "setPowerState.yml"
     ]
-    subprocess.Popen(command)
+    with open("shutdown_devices.log", "w") as logfile:
+        subprocess.Popen(command, stdout=logfile, stderr=subprocess.STDOUT)
 
-schedule.every().day.at("09:00").do(start_devices)
-
+schedule.every().day.at("08:30").do(start_devices)
 schedule.every().day.at("18:00").do(shutdown_devices)
 
 while True:

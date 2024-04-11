@@ -10,6 +10,8 @@
 
 # Ansible network config files
 config_files/
+playbooks/shutdown_devices.log
+playbooks/start_devices.log
 
 # Common credential files
 **/credentials.json

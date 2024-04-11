@@ -54,7 +54,7 @@ push_config('/dev/ttyUSB2', '/home/miggy/ansible-network/config_files/switchTwo.
 
 time.sleep(30)
 
-push_config('/dev/ttyUSB3', '/home/miggy/ansible-network/config_files/switchThree.txt')
+push_config('/dev/ttyUSB0', '/home/miggy/ansible-network/config_files/switchThree.txt')
 
 end_time = time.time()
 
