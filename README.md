@@ -22,7 +22,7 @@ Web controller:
 
 Below is an image of the topology used for testing the Ansible playbooks and Python scripts. The topology consists of a Linux machine as the control node to a web controller, and 4 network devices.
 
-![Getting Started](images/Thesis_topology.png)
+![Getting Started](./images/Thesis_topology.png)
 
 
 # How to use the IP Power 9258 playbooks
