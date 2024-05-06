@@ -12,6 +12,7 @@
 config_files/
 playbooks/shutdown_devices.log
 playbooks/start_devices.log
+images/
 
 # Common credential files
 **/credentials.json

@@ -1,44 +1,40 @@
-# Ansible Network Automation Thesis Project
+# Network Automation Thesis Project
 
-This my implematantion of using Ansible to automate some of the network devices at `Metropolia University of Applied Sciences` lab. Bellow you can find the Ansible playbooks, inventories, configurations (used fortesting) and a Python Script that puts it all together.  
+This is my implementation of using Ansible and Python for my bachelor's thesis to automate the network lab at `Metropolia University of Applied Sciences`. In this project, you can find the Ansible playbooks, inventory, and Python Scripts that made it possible.  
 
-# Why? 
+# Goal
 
+The main goal for this project was to be able to automate the network's lab since it is still being manually managed for updates, lab/exams configurations, and power management, and to provide a road map of playbook and scripts to help the lectures introduce network automation for network management and educational purposes.
 
+# Devices
 
-# Device
+PC:
+    - Ubuntu 23.10
 
-Cisco:
-    - Cisco router
-    - Cisco Switch 
+Router & Switches:
+    - Cisco 2801 router
+    - Cisco Catalyst 3560 Switch 
 
-HP:
-    - HP Switch
-
-AVIOSYS:
+Web controller:
     - IP Power 9258
 
 # Topology
 
-The idea for this project was to be able to automate the network's lab since its still being manually manage for updates, lab/exams configs and power, below is an image of the topogy used for testing the devices. The topoly consist of a Linux machine (Ubuntu 23.10) as the control node and 4 network devices as the remote host.
+Below is an image of the topology used for testing the Ansible playbooks and Python scripts. The topology consists of a Linux machine as the control node to a web controller, and 4 network devices.
+
+![Getting Started](./images/Thesis%20topology.png)
 
 
-# how to use to use the Network-Ansible playbook
+# How to use the IP Power 9258 playbooks
 
+Credits for the web controller playbooks go to [syspimp](https://github.com/syspimp) for his straightforward but great example of how to automate and manage the IP Power 9258 using Ansible.
 
-
-
-
-
-
-# how to use the IP Power 9258 playbooks
-
-Credits go to @syspimp (https://github.com/syspimp) for this straightforward but great example of how to automate and manage the the IP Power 9258 using Ansible.
-
+To use, curl or visit this URL to test if this will work on your IP Power. The default user is admin, and the default password is '12345678'. Change it if needed and change the IP address as needed. I used use 192.168.1.10 in this example:
 
 ```shell
 curl 'http://admin:12345678@192.168.1.10/Set.cmd?CMD=GetPower'
 ```
+If you get something like this back 'p61=1,p62=1,p63=1,p64=1', you are all set. Otherwise, you will need to enable HTTP commands in the Web Console for your IP Power 9258 unit. Visit http://192.168.1.10/system.htm to enable HTTP commands. Your device may reboot and cut the power to anything connected when you change a setting!!
 
 ```shell
 $ ansible-playbook -i inventory getPowerState.yml 
@@ -68,18 +64,9 @@ ok: [192.168.1.10] => {
 PLAY RECAP ***********************************************************************
 192.168.1.10               : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0     
 
-
 ```
-output.content looks like this: <html>p61=1,p62=1,p63=1,p64=1</html>, 
-where P61 thru P64 are the 4 outlets and
-1 is outlet on, 0 is outlet off
-we create a dictionary by splitting on the comma in output.content,
-reate an index variable outlet_index to track the outlet number in a dictionary named 'result'if 'result' is not set, default to empty {} and combine with local vars: 'key' and 'value'
-local vars: 'value' is set by removing all content except the outlet state using regex_replace
-replace '0' to be 'Off'
-create an if/then by searching for Off and if not found output On
-result = {"Port1": "On", "Port2": "Off" ...}
 
+You can also pass in extra-vars to the playbook using the -e flag on the command line:
 
 ```shell
 $ ansible-playbook -e '{"outlets":[{"outlet":"1","state":"1"},{"outlet":"2","state":"1"}]}' -i inventory setPowerState.yml 
